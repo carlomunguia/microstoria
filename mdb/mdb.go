@@ -87,12 +87,12 @@ func GetEmail(db *sql.DB, email string) (*EmailEntry, error) {
 func UpdateEmail(db *sql.DB, entry EmailEntry) error {
 	t := entry.ConfirmedAt.Unix()
 
-	_, err := db.Exec(`
+	_, err := db.Exec(`INSERT INTO
 		emails(email, confirmed_at, opt_out)
 		VALUES(?, ?, ?)
 		ON CONFLICT(email) DO UPDATE SET
-		confirmed_at = ?,
-		opt_out = ?`, entry.Email, t, entry.OptOut, t, entry.OptOut)
+			confirmed_at = ?,
+			opt_out = ?`, entry.Email, t, entry.OptOut, t, entry.OptOut)
 
 	if err != nil {
 		log.Println(err)
